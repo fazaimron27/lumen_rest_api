@@ -35,4 +35,20 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         return response()->json($product);
     }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'price' => 'required|integer',
+            'color' => 'required|string',
+            'condition' => 'required|in:new,old',
+            'description' => 'string',
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->update($request->all());
+
+        return response()->json($product);
+    }
 }

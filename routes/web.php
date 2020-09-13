@@ -14,3 +14,4 @@
 $router->get('/product', 'ProductController@index');
 $router->post('/product', 'ProductController@store');
 $router->get('/product/{id}', 'ProductController@show');
+$router->put('/product/{id}', 'ProductController@update');
