@@ -25,4 +25,28 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
+
+    public function login(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        $isValidPassword = Hash::check($request->password, $user->password);
+
+        if(!$user || !$isValidPassword) {
+            return response()->json([
+                'message' => 'login failed'
+            ]);
+        }
+
+        $generateApiToken = bin2hex(random_bytes(40));
+        $user->update([
+            'api_token' => $generateApiToken
+        ]);
+
+        return response()->json($user);
+    }
 }
