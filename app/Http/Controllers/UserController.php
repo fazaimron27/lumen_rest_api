@@ -34,9 +34,14 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        $isValidPassword = Hash::check($request->password, $user->password);
+        if(!$user) {
+            return response()->json([
+                'message' => 'login failed'
+            ]);
+        }
 
-        if(!$user || !$isValidPassword) {
+        $isValidPassword = Hash::check($request->password, $user->password);
+        if(!$isValidPassword) {
             return response()->json([
                 'message' => 'login failed'
             ]);
